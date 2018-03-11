@@ -1,16 +1,6 @@
-#Do so that the [2]/[3] is "[!]" for flagged, "[?]" for unsweeped, "[x]" for mine, 0 for empty/no mines near.
-#Do so that it has one hidden marking (the real marking, this one will have no ?'s, only x and numbers) and one public one (the one the player can see, with !'s, ?'s etc.)
 #grid[x][2] is public one, grid[x][3] is the hidden one.
-#Do so you cannot sweep the same square twice, grid[x][4] == "yes" /"no"?
 #The only squares that have hidden values are the ones who have value 0.
 #You cannot die.
-#Auto-show squares do not get "yes".
-#Cannot check other squares.
-#Check ####
-#Do so you cannot flag "yes" grids.
-#Perhaps it is that empty squares cannot be sweeped.
-#X value 1 gets it's number off sometimes. Fixed now I think.
-#You cannot win now. Do so it prints how many mines are left and when none are left you win.
 #Square A2 (index '1') showed the number '0', while it should have been a '1'. Might be because of 'grid[x-1][3]' thingy.
 #Square B2 (index '10') showed the number '1', while it should have been a '2'. Might be because of ^.
 #Maybe do so that you can save the board, with /save. Saves into a txt file.
@@ -33,7 +23,6 @@ while True:
     grid = [[0 for x in range(c)] for y in range(r)]
     for x in range(len(grid)):
         letter = x/9
-        #equation for number: x-8n-n, n = first number in if statement.
         if letter < 1:
             grid[x][0] = "a"
             grid[x][1] = x+1
@@ -161,8 +150,8 @@ while True:
                             grid[x][4] = "yes"
                         else:
                             pass #used to be print ("error:")
-                        
-                        
+
+
                 elif action == "flag":
                     grid[x][2] = "!"
                     break
@@ -211,7 +200,7 @@ while True:
                         if x < 80 and grid[x][1] != 9:
                             if grid[x+1][3] == "x":
                                 number += 1
-                        
+
                     elif grid[x][1] == 1:#-8 och -9
                         if x > 7:#was 8
                             if grid[x-8][3] == "x":
@@ -228,7 +217,7 @@ while True:
                         if x < 80:#was 79 and grid[x][1] != 9
                             if grid[x+1][3] == "x":
                                 number += 1
-                        
+
                     elif grid[x][1] == 9:
                         number = 0
                         if x > 0:#was 1
@@ -249,12 +238,12 @@ while True:
                     if x == y:
                         grid[x][2] = number
                     grid[x][3] = number
-                        
+
         #for x in range (len(grid)):
             #print (grid[x][3],"grid[x][3]",x,"x")
             #grid[x][2] = grid[x][3] Did this to show the places of the mines. Do not use in final version!
 ####
-            
+
         if times == 0:
             for x in range (len(adj)):
                 if adj[x][3] != "x":
@@ -273,7 +262,6 @@ while True:
         for x in range (len(grid)):
             if grid[x][2] == "!" and grid[x][3] == "x":
                 correct += 1
-                print (correct,"correct")
             if correct == mines:
                 print ("You have succesfully marked all the mines.")
                 play = "no"
@@ -282,13 +270,3 @@ while True:
         os.system('cls')
         print ("    [Mines: {}] [Flags placed: {}]".format(mines, flags))
         times = 1
-    #      1  2  3  4  5  6  7  8  9 
-    #A    [x][?][!][x][x][?][?][x][x]
-    #B    [?][x][x][?][?][x][x][?][?]
-    #C    [x][?][?][x][x][?][?][x][x]
-    #D    [?][x][x][?][?][x][x][?][?]
-    #E    [x][?][?][1][x][?][?][x][x]
-    #F    [?][x][!][2][?][x][x][?][?]
-    #G    [x][?][?][3][x][?][?][x][x]
-    #H    [?][x][x][4][?][x][x][?][?]
-    #I    [x][?][?][5][x][!][?][x][x]
