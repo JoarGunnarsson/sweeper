@@ -1,5 +1,4 @@
 #grid[x][2] is public one, grid[x][3] is the hidden one.
-#The only squares that have hidden values are the ones who have value 0.
 #You cannot die.
 #Square A2 (index '1') showed the number '0', while it should have been a '1'. Might be because of 'grid[x-1][3]' thingy.
 #Square B2 (index '10') showed the number '1', while it should have been a '2'. Might be because of ^.
@@ -54,7 +53,7 @@ while True:
         grid[x][2] = "?"
         grid[x][3] = "N/A"
         grid[x][4] = "no"
-        grid[x][5] = x #Saves the index.
+        grid[x][5] = x
     while play != "no":
         print ("      1  2  3  4  5  6  7  8  9 ")
         print ("A    [{}][{}][{}][{}][{}][{}][{}][{}][{}]".format(grid[0][2], grid[1][2],grid[2][2],grid[3][2],grid[4][2],grid[5][2],grid[6][2],grid[7][2],grid[8][2]))
@@ -129,7 +128,7 @@ while True:
                   time.sleep(1)
                 elif action == "sweep":
                     if times == 0:
-                        grid[x][2] = "number" #was 0
+                        grid[x][2] = "number"
                         grid[x][3] = "number"
                         grid[x][4] = "yes"
                         y = x
