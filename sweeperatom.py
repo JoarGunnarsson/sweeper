@@ -4,10 +4,6 @@
 #Do so you cannot sweep the same square twice, grid[x][4] == "yes" /"no"?
 #The only squares that have hidden values are the ones who have value 0.
 #You cannot die.
-#Auto-show squares do not get "yes".
-#Cannot check other squares.
-#Check ####
-#Do so you cannot flag "yes" grids.
 #Perhaps it is that empty squares cannot be sweeped.
 #X value 1 gets it's number off sometimes. Fixed now I think.
 #You cannot win now. Do so it prints how many mines are left and when none are left you win.
@@ -282,13 +278,3 @@ while True:
         os.system('cls')
         print ("    [Mines: {}] [Flags placed: {}]".format(mines, flags))
         times = 1
-    #      1  2  3  4  5  6  7  8  9
-    #A    [x][?][!][x][x][?][?][x][x]
-    #B    [?][x][x][?][?][x][x][?][?]
-    #C    [x][?][?][x][x][?][?][x][x]
-    #D    [?][x][x][?][?][x][x][?][?]
-    #E    [x][?][?][1][x][?][?][x][x]
-    #F    [?][x][!][2][?][x][x][?][?]
-    #G    [x][?][?][3][x][?][?][x][x]
-    #H    [?][x][x][4][?][x][x][?][?]
-    #I    [x][?][?][5][x][!][?][x][x]
