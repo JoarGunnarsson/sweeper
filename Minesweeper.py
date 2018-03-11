@@ -6,6 +6,7 @@
 #To win, all grid[x][2] must = grid[x][3], unless [3] is "x", then [2] must be "!".
 #Also create a variable "incorrect". If you place a flag wrong, incorrect += 1.
 #Do so that even numbers in the adjacent can be '?'.
+#Including this to test.
 import os
 import random
 import time
