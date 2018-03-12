@@ -6,7 +6,6 @@
 #To win, all grid[x][2] must = grid[x][3], unless [3] is "x", then [2] must be "!".
 #Also create a variable "incorrect". If you place a flag wrong, incorrect += 1.
 #Do so that even numbers in the adjacent can be '?'.
-#Including this to test.
 import os
 import random
 import time
@@ -17,7 +16,8 @@ while True:
     play = "yes"
     print ("Starting Minesweeper...")
     print ("Generating board...")
-    print ("? on a square means it has not been sweeped yet, x means you have put a flag on it and the numbers tell you how many mines are adjacent to that square.\n")
+    print ("? on a square means it has not been sweeped yet, x means you have put a flag on it and the numbers tell you how many mines are adjacent to that square.")
+    print ("When you have flagged all the mines, you have to sweep all the remaining squares to complete the game.\n")
     mines = "none"
     c, r = 6, 81
     grid = [[0 for x in range(c)] for y in range(r)]
@@ -140,16 +140,14 @@ while True:
                           print ("That square has been flagged. Remove the flag to sweep the square.")
                           time.sleep(1)
                           break
-                        elif grid[x][3] == "x": #x = mine
+                        elif grid[x][3] == "x":
                             print ("You sweeped a square, but there was a mine there. You have exploded.")
                             time.sleep(1)
                             #Do an ascii explosion here.
                             break
                         elif grid[x][3] in xaxis:
-                            grid[x][2] = grid[x][3] #Makes the number of the square public.
+                            grid[x][2] = grid[x][3]
                             grid[x][4] = "yes"
-                        else:
-                            pass #used to be print ("error:")
 
 
                 elif action == "flag":
@@ -157,20 +155,14 @@ while True:
                     break
                 else:
                     print ("Error, action != either flag or sweep...")
-        #Generate board here.
         if times == 0:
             for x in range (len(grid)):
-                if x != y: # and grid[x] not in adj #If it is not the square you selected in the beginning. Make it also so it is next to the original one. Should work now.
+                if x != y:
                     hidden = random.randint(1,100)
                     if hidden < 30:
                         grid[x][3] = "x"
                     else:
-                        grid[x][3] = "number" #further down, all the grids with hidden have to check how many of the near ones are mines, and show that mine. use grid[y-1][3] etc.
-        #Done generating the mines. Now count how many near ones are mines.
-        #Fix, the number is influenced by index -1 and +1 when it should not, when it has the value 1 or 9 on the x axis.
-        #X value 1: x-8, x-9, x+1, x+9, x+10
-        #X value 9: x-9, x-10, x-1, x+8, x+9
-        #Seems like it is fixed.
+                        grid[x][3] = "number"
         if times == 0:
             for x in range (len(grid)):
                 if grid[x][3] != "x":
@@ -238,12 +230,6 @@ while True:
                     if x == y:
                         grid[x][2] = number
                     grid[x][3] = number
-
-        #for x in range (len(grid)):
-            #print (grid[x][3],"grid[x][3]",x,"x")
-            #grid[x][2] = grid[x][3] Did this to show the places of the mines. Do not use in final version!
-####
-
         if times == 0:
             for x in range (len(adj)):
                 if adj[x][3] != "x":
@@ -251,7 +237,11 @@ while True:
                     grid[adj[x][5]][4] = "yes"
         correct = 0
         flags = 0
+        sweeped = 0
         for x in range (len(grid)):
+            if grid[x][3] != "x":
+                if grid[x][2] == grid[x][3]:
+                    sweeped += 1
             if times == 0:
                 if mines == "none":
                     mines = 0
@@ -262,7 +252,7 @@ while True:
         for x in range (len(grid)):
             if grid[x][2] == "!" and grid[x][3] == "x":
                 correct += 1
-            if correct == mines:
+            if correct == mines and sweeped == len(grid) - mines:
                 print ("You have succesfully marked all the mines.")
                 play = "no"
                 time.sleep(3)
@@ -270,3 +260,15 @@ while True:
         os.system('cls')
         print ("    [Mines: {}] [Flags placed: {}]".format(mines, flags))
         times = 1
+    action = input("Do you want to go again? Y/N \n")
+    action = action.lower()
+    if "n" in action:
+        print ("Alright, exiting.")
+        timme.sleep(3)
+        import sys
+        sys.exit()
+    elif "y" in action:
+        print ("Alright, restarting...")
+        time.sleep(3)
+    else:
+        print ("%d is not an option." %(action))
