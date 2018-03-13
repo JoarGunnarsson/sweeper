@@ -6,7 +6,6 @@
 #To win, all grid[x][2] must = grid[x][3], unless [3] is "x", then [2] must be "!".
 #Also create a variable "incorrect". If you place a flag wrong, incorrect += 1.
 #Do so that even numbers in the adjacent can be '?'.
-#If you sweep a1 first, H9 I1, I9, A9, are adjacents. FIXXXXX
 import os
 import random
 import time
@@ -146,23 +145,23 @@ while True:
                         grid[x][3] = "number"
                         grid[x][4] = "yes"
                         y = x
-                        if grid[1] == 1:
-                            if grid[0] == "a":
+                        if grid[x][1] == 1:
+                            if grid[x][0] == "a":
                                 adj = [grid[y+1], grid[y+10], grid[y+9]]
-                            elif grid[0] == "i":
+                            elif grid[x][0] == "i":
                                 adj = [grid[y+1], grid[y-9], grid[y-8]]
                             else:
                                 adj = [grid[y+1], grid[y-9], grid[y-8], grid[y+10], grid[y+9]]
-                        elif grid[1] == 9:
-                            if grid[0] == "a":
-                                adj = [grid[y-1], grid[y+1], grid[y+9], grid[y+8]]
-                            elif grid[0] == "i":
+                        elif grid[x][1] == 9:
+                            if grid[x][0] == "a":
+                                adj = [grid[y-1], grid[y+9], grid[y+8]]
+                            elif grid[x][0] == "i":
                                 adj = [grid[y-1], grid[y-10], grid[y-9]]
                             else:
                                 adj = [grid[y-1], grid[y-10], grid[y-9], grid[y+9], grid[y+8]]
-                        elif grid[0] == "a":
+                        elif grid[x][0] == "a":
                             adj = [grid[y-1], grid[y+1], grid[y+10], grid[y+9], grid[y+8]]
-                        elif grid[0] == "i":
+                        elif grid[x][0] == "i":
                             adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8]]
                         else:
                             adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8], grid[y+10], grid[y+9], grid[y+8]]
