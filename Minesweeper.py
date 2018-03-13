@@ -3,58 +3,78 @@
 #Square A2 (index '1') showed the number '0', while it should have been a '1'. Might be because of 'grid[x-1][3]' thingy.
 #Square B2 (index '10') showed the number '1', while it should have been a '2'. Might be because of ^.
 #Maybe do so that you can save the board, with /save. Saves into a txt file.
-#To win, all grid[x][2] must = grid[x][3], unless [3] is "x", then [2] must be "!".
-#Also create a variable "incorrect". If you place a flag wrong, incorrect += 1.
 #Do so that even numbers in the adjacent can be '?'.
 import os
 import random
 import time
+import save
 yaxis = ["a","b","c","d","e","f","g","h","i"]
 xaxis = [0,1,2,3,4,5,6,7,8,9,"1","2","3","4","5","6","7","8","9"]
 while True:
     play = "yes"
     times = 0
-    print ("Starting Minesweeper...")
-    print ("Generating board...")
-    print ("? on a square means it has not been sweeped yet, x means you have put a flag on it and the numbers tell you how many mines are adjacent to that square.")
-    print ("When you have flagged all the mines, you have to sweep all the remaining squares to complete the game.\n")
     mines = "none"
-    c, r = 6, 81
-    grid = [[0 for x in range(c)] for y in range(r)]
-    for x in range(len(grid)):
-        letter = x/9
-        if letter < 1:
-            grid[x][0] = "a"
-            grid[x][1] = x+1
-        if letter >= 1 and letter < 2:
-            grid[x][0] = "b"
-            grid[x][1] = x-8
-        if letter >= 2 and letter < 3:
-            grid[x][0] = "c"
-            grid[x][1] = x-16-1
-        if letter >= 3 and letter < 4:
-            grid[x][0] = "d"
-            grid[x][1] = x-24-2
-        if letter >= 4 and letter < 5:
-            grid[x][0] = "e"
-            grid[x][1] = x-32-3
-        if letter >= 5 and letter < 6:
-            grid[x][0] = "f"
-            grid[x][1] = x-40-4
-        if letter >= 6 and letter < 7:
-            grid[x][0] = "g"
-            grid[x][1] = x-48-5
-        if letter >= 7 and letter < 8:
-            grid[x][0] = "h"
-            grid[x][1] = x-56-6
-        if letter >= 8 and letter < 9:
-            grid[x][0] = "i"
-            grid[x][1] = x-64-7
-    for x in range(len(grid)):
-        grid[x][2] = "?"
-        grid[x][3] = "N/A"
-        grid[x][4] = "no"
-        grid[x][5] = x
+    while True:
+        action = input("Do you want start a new game or load a save?\n")
+        action = action.lower()
+        if "load" in action:
+            f = open("save.py","r")
+            contents = f.read()
+            f.close()
+            if contents != "":
+                grid = save.savegrid
+                print ("Board has been loaded.")
+                times = 1
+                break
+            else:
+                print ("The save file is empty, cannot load save!")
+        else:
+            break
+    print ("\nEnter /save to save the game.\n")
+
+    #time.sleep(20)
+    if "load" not in action:
+        time.sleep(2)
+        print ("Starting Minesweeper...")
+        print ("Generating board...")
+        print ("? on a square means it has not been sweeped yet, ! means a squared has been flagged, and the numbers tell you how many mines are adjacent to that square.")
+        print ("When you have flagged all the mines, you have to sweep all the remaining squares to complete the game.\n")
+        c, r = 6, 81
+        grid = [[0 for x in range(c)] for y in range(r)]
+        for x in range(len(grid)):
+            letter = x/9
+            if letter < 1:
+                grid[x][0] = "a"
+                grid[x][1] = x+1
+            if letter >= 1 and letter < 2:
+                grid[x][0] = "b"
+                grid[x][1] = x-8
+            if letter >= 2 and letter < 3:
+                grid[x][0] = "c"
+                grid[x][1] = x-16-1
+            if letter >= 3 and letter < 4:
+                grid[x][0] = "d"
+                grid[x][1] = x-24-2
+            if letter >= 4 and letter < 5:
+                grid[x][0] = "e"
+                grid[x][1] = x-32-3
+            if letter >= 5 and letter < 6:
+                grid[x][0] = "f"
+                grid[x][1] = x-40-4
+            if letter >= 6 and letter < 7:
+                grid[x][0] = "g"
+                grid[x][1] = x-48-5
+            if letter >= 7 and letter < 8:
+                grid[x][0] = "h"
+                grid[x][1] = x-56-6
+            if letter >= 8 and letter < 9:
+                grid[x][0] = "i"
+                grid[x][1] = x-64-7
+        for x in range(len(grid)):
+            grid[x][2] = "?"
+            grid[x][3] = "N/A"
+            grid[x][4] = "no"
+            grid[x][5] = x
     while play != "no":
         print ("      1  2  3  4  5  6  7  8  9 ")
         print ("A    [{}][{}][{}][{}][{}][{}][{}][{}][{}]".format(grid[0][2], grid[1][2],grid[2][2],grid[3][2],grid[4][2],grid[5][2],grid[6][2],grid[7][2],grid[8][2]))
@@ -69,7 +89,15 @@ while True:
         while True:
             square = input("Enter the coordinates of the square you want to sweep/flag (e.g A5) and what you want to do with it ('flag', 'unflag' or 'sweep').\n")
             square = square.lower()
-            if times == 0 and "sweep" not in square:
+            if "save" in square:
+                print ("Alright, saving the board.")
+                f = open("save.py","w")
+                savegrid = str(grid)
+                f.write("savegrid = ")
+                f.write(savegrid)
+                f.close()
+                print ("Done.\n")
+            elif times == 0 and "sweep" not in square:
                 print ("The first action should be a sweep.")
             elif 'unflag' in square:
                 action = 'unflag'
@@ -269,15 +297,15 @@ while True:
         correct = 0
         flags = 0
         sweeped = 0
+        mines = 0
         for x in range (len(grid)):
             if grid[x][3] != "x":
                 if grid[x][2] == grid[x][3]:
                     sweeped += 1
-            if times == 0:
-                if mines == "none":
-                    mines = 0
-                if grid[x][3] == "x":
-                    mines += 1
+            #if mines == "none":
+            #    mines = 0
+            if grid[x][3] == "x":
+                mines += 1
             if grid[x][2] == "!":
                 flags += 1
         for x in range (len(grid)):
