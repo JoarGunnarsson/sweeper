@@ -6,14 +6,15 @@
 #To win, all grid[x][2] must = grid[x][3], unless [3] is "x", then [2] must be "!".
 #Also create a variable "incorrect". If you place a flag wrong, incorrect += 1.
 #Do so that even numbers in the adjacent can be '?'.
+#If you sweep a1 first, H9 I1, I9, A9, are adjacents. FIXXXXX
 import os
 import random
 import time
 yaxis = ["a","b","c","d","e","f","g","h","i"]
-xaxis = [0,1,2,3,4,5,6,7,8,9]
-times = 0
+xaxis = [0,1,2,3,4,5,6,7,8,9,"1","2","3","4","5","6","7","8","9"]
 while True:
     play = "yes"
+    times = 0
     print ("Starting Minesweeper...")
     print ("Generating board...")
     print ("? on a square means it has not been sweeped yet, x means you have put a flag on it and the numbers tell you how many mines are adjacent to that square.")
@@ -69,12 +70,13 @@ while True:
         while True:
             square = input("Enter the coordinates of the square you want to sweep/flag (e.g A5) and what you want to do with it ('flag', 'unflag' or 'sweep').\n")
             square = square.lower()
-            if 'unflag' in square:
+            if times == 0 and "sweep" not in square:
+                print ("The first action should be a sweep.")
+            elif 'unflag' in square:
                 action = 'unflag'
                 square = square.replace("unflag","")
                 square = square.replace(" ","")
                 square = list(square)
-                square[1] = int(square[1])
                 if len(square) != 2:
                     print ("Write the coordinates of the square properly.")
                 elif square[0] not in yaxis:
@@ -82,13 +84,16 @@ while True:
                 elif square[1] not in xaxis:
                     print ("Write the coordinates of the square properly.")
                 else:
+                    if square [1] in xaxis:
+                        square[1] = int(square[1])
+                    elif square [1] in yaxis:
+                        square[1] = int(square[0])
                     break
             elif 'flag' in square:
                 action = 'flag'
                 square = square.replace("flag","")
                 square = square.replace(" ","")
                 square = list(square)
-                square[1] = int(square[1])
                 if len(square) != 2:
                     print ("Write the coordinates of the square properly.")
                 elif square[0] not in yaxis:
@@ -96,21 +101,29 @@ while True:
                 elif square[1] not in xaxis:
                     print ("Write the coordinates of the square properly.")
                 else:
+                    if square [1] in xaxis:
+                        square[1] = int(square[1])
+                    elif square [1] in yaxis:
+                        square[1] = int(square[0])
                     break
             elif 'sweep' in square:
                 action = 'sweep'
                 square = square.replace("sweep","")
                 square = square.replace(" ","")
                 square = list(square)
-                square[1] = int(square[1])
                 if len(square) != 2:
                     print ("Write the coordinates of the square properly.")
-                elif square[0] not in yaxis:
-                    print ("Write the coordinates of the square properly.")
-                elif square[1] not in xaxis:
-                    print ("Write the coordinates of the square properly.")
                 else:
-                    break
+                    if square [1] in xaxis:
+                        square[1] = int(square[1])
+                        break
+                    elif square [1] in yaxis:
+                        square1 = square[1]
+                        square[1] = int(square[0])
+                        square[0] = square1
+                        break
+                    else:
+                        print ("Write the coordinates of the square properly.")
             else:
                 print ("You have to include the action!")
         for x in range (len(grid)):
@@ -133,7 +146,26 @@ while True:
                         grid[x][3] = "number"
                         grid[x][4] = "yes"
                         y = x
-                        adj = [grid[y-1], grid[x+1], grid[y-10], grid[y-9], grid[y-8], grid[y+10], grid[y+9], grid[y+8]]
+                        if grid[1] == 1:
+                            if grid[0] == "a":
+                                adj = [grid[y+1], grid[y+10], grid[y+9]]
+                            elif grid[0] == "i":
+                                adj = [grid[y+1], grid[y-9], grid[y-8]]
+                            else:
+                                adj = [grid[y+1], grid[y-9], grid[y-8], grid[y+10], grid[y+9]]
+                        elif grid[1] == 9:
+                            if grid[0] == "a":
+                                adj = [grid[y-1], grid[y+1], grid[y+9], grid[y+8]]
+                            elif grid[0] == "i":
+                                adj = [grid[y-1], grid[y-10], grid[y-9]]
+                            else:
+                                adj = [grid[y-1], grid[y-10], grid[y-9], grid[y+9], grid[y+8]]
+                        elif grid[0] == "a":
+                            adj = [grid[y-1], grid[y+1], grid[y+10], grid[y+9], grid[y+8]]
+                        elif grid[0] == "i":
+                            adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8]]
+                        else:
+                            adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8], grid[y+10], grid[y+9], grid[y+8]]
                         break
                     else:
                         if grid[x][2] == "!":
