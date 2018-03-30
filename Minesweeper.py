@@ -17,7 +17,7 @@ while True:
     play = "yes"
     times = 0
     mines = "none"
-    while health != 0:
+    while True:
         action = input("Do you want start a new game or load a save?\n")
         action = action.lower()
         if "load" in action:
@@ -93,7 +93,7 @@ while True:
             grid[x][5] = x
     time.sleep(b)
     os.system('cls')
-    while play != "no":
+    while play != "no" and health != 0:
         print ("     [Health: %d]"%(health))
         print ("      1  2  3  4  5  6  7  8  9 ")
         print ("A    [{}][{}][{}][{}][{}][{}][{}][{}][{}]".format(grid[0][2], grid[1][2],grid[2][2],grid[3][2],grid[4][2],grid[5][2],grid[6][2],grid[7][2],grid[8][2]))
@@ -361,8 +361,6 @@ while True:
             if grid[x][3] != "x":
                 if grid[x][2] == grid[x][3]:
                     sweeped += 1
-            #if mines == "none":
-            #    mines = 0
             if grid[x][3] == "x":
                 mines += 1
             if grid[x][2] == "!":
@@ -376,7 +374,8 @@ while True:
                 time.sleep(c)
                 break
         os.system('cls')
-        print ("     [Mines: {}] [Flags placed: {}]".format(mines, flags))
+        if health != 0:
+            print ("     [Mines: {}] [Flags placed: {}]".format(mines, flags))
         times = 1
     action = input("Do you want to go again? Y/N \n")
     action = action.lower()
