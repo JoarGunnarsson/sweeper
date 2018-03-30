@@ -1,8 +1,7 @@
 #grid[x][2] is public one, grid[x][3] is the hidden one.
-#You cannot die.
+#Give the player health. Hard = 1 hp, Medium = 3 hp, Easy = 5 hp.
 #Square A2 (index '1') showed the number '0', while it should have been a '1'. Might be because of 'grid[x-1][3]' thingy.
 #Square B2 (index '10') showed the number '1', while it should have been a '2'. Might be because of ^.
-#Maybe do so that you can save the board, with /save. Saves into a txt file.
 #Do so that even numbers in the adjacent can be '?'.
 import os
 import random
@@ -10,11 +9,15 @@ import time
 import save
 yaxis = ["a","b","c","d","e","f","g","h","i"]
 xaxis = [0,1,2,3,4,5,6,7,8,9,"1","2","3","4","5","6","7","8","9"]
+a = 1
+b = 2
+c = 3
+health = 1
 while True:
     play = "yes"
     times = 0
     mines = "none"
-    while True:
+    while health != 0:
         action = input("Do you want start a new game or load a save?\n")
         action = action.lower()
         if "load" in action:
@@ -23,22 +26,35 @@ while True:
             f.close()
             if contents != "":
                 grid = save.savegrid
+                health = save.health
                 print ("Board has been loaded.")
                 times = 1
                 break
             else:
                 print ("The save file is empty, cannot load save!")
         else:
+            while True:
+                health = input("What difficulty do you want to play with? 'Hard', 'Medium' or 'Easy'?\n")
+                health = health.lower()
+                if "hard" in health:
+                    health = 1
+                    break
+                elif "medium" in health:
+                    health = 3
+                    break
+                elif "easy" in health:
+                    health = 5
+                    break
+                else:
+                    print ("That's not a valid difficulty!\n")
             break
-    print ("\nEnter /save to save the game.\n")
-
-    #time.sleep(20)
+    print ("Enter /save at any time to save the game.\n")
     if "load" not in action:
-        time.sleep(2)
         print ("Starting Minesweeper...")
-        print ("Generating board...")
         print ("? on a square means it has not been sweeped yet, ! means a squared has been flagged, and the numbers tell you how many mines are adjacent to that square.")
         print ("When you have flagged all the mines, you have to sweep all the remaining squares to complete the game.\n")
+        print ("Generating board...")
+        time.sleep(c+b)
         c, r = 6, 81
         grid = [[0 for x in range(c)] for y in range(r)]
         for x in range(len(grid)):
@@ -75,7 +91,10 @@ while True:
             grid[x][3] = "N/A"
             grid[x][4] = "no"
             grid[x][5] = x
+    time.sleep(b)
+    os.system('cls')
     while play != "no":
+        print ("     [Health: %d]"%(health))
         print ("      1  2  3  4  5  6  7  8  9 ")
         print ("A    [{}][{}][{}][{}][{}][{}][{}][{}][{}]".format(grid[0][2], grid[1][2],grid[2][2],grid[3][2],grid[4][2],grid[5][2],grid[6][2],grid[7][2],grid[8][2]))
         print ("B    [{}][{}][{}][{}][{}][{}][{}][{}][{}]".format(grid[9][2], grid[10][2],grid[11][2],grid[12][2],grid[13][2],grid[14][2],grid[15][2],grid[16][2],grid[17][2]))
@@ -87,16 +106,22 @@ while True:
         print ("H    [{}][{}][{}][{}][{}][{}][{}][{}][{}]".format(grid[63][2], grid[64][2],grid[65][2],grid[66][2],grid[67][2],grid[68][2],grid[69][2],grid[70][2],grid[71][2]))
         print ("I    [{}][{}][{}][{}][{}][{}][{}][{}][{}]".format(grid[72][2], grid[73][2],grid[74][2],grid[75][2],grid[76][2],grid[77][2],grid[78][2],grid[79][2],grid[80][2]))
         while True:
-            square = input("Enter the coordinates of the square you want to sweep/flag (e.g A5) and what you want to do with it ('flag', 'unflag' or 'sweep').\n")
+            if times == 0:
+                square = input("Enter the coordinates of the square you want to sweep/flag (e.g A5) and what you want to do with it ('flag', 'unflag' or 'sweep').\n")
+            else:
+                square = input("Enter the coordinates of the square.\n")
             square = square.lower()
             if "save" in square:
                 print ("Alright, saving the board.")
                 f = open("save.py","w")
-                savegrid = str(grid)
-                f.write("savegrid = ")
-                f.write(savegrid)
+                f.write("health = ")
+                f.write(str(health))
+                f.write("\nsavegrid = ")
+                f.write(str(grid))
                 f.close()
                 print ("Done.\n")
+                time.sleep(b)
+                break
             elif times == 0 and "sweep" not in square:
                 print ("The first action should be a sweep.")
             elif 'unflag' in square:
@@ -158,15 +183,15 @@ while True:
                 if grid[x][4] == "yes":
                     if action == "sweep":
                         print ("You have already sweeped that square.")
-                        time.sleep(1)
+                        time.sleep(a)
                     elif action == "flag":
                         print ("You cannot flag a sweeped square.")
-                        time.sleep(1)
+                        time.sleep(a)
                     break
                 if action == "unflag":
                   print ("Marking the selected square as '?'")
                   grid[x][2] = "?"
-                  time.sleep(1)
+                  time.sleep(a)
                 elif action == "sweep":
                     if times == 0:
                         grid[x][2] = "number"
@@ -187,21 +212,55 @@ while True:
                                 adj = [grid[y-1], grid[y-10], grid[y-9]]
                             else:
                                 adj = [grid[y-1], grid[y-10], grid[y-9], grid[y+9], grid[y+8]]
+                        elif grid[x][1] == 2:
+                            if grid[x][0] == "a":
+                                adj = [grid[y-1], grid[y+1], grid[y+10], grid[y+9], grid[y+8]]
+                            elif grid[x][0] == "b":
+                                adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8], grid[y+10], grid[y+9], grid[y+8]]
+                            elif grid[x][0] == "h":
+                                adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8], grid[y+10], grid[y+9], grid[y+8]]
+                            elif grid[x][0] == "i":
+                                adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8]]
+                            else:
+                                adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8], grid[y+10], grid[y+9], grid[y+8]]
+                        elif grid[x][1] == "8":
+                            if grid[x][0] == "a":
+                                adj = [grid[y-1], grid[y+1], grid[y+10], grid[y+9], grid[y+8]]
+                            elif grid[x][0] == "b":
+                                adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8], grid[y+10], grid[y+9], grid[y+8]]
+                            elif grid[x][0] == "h":
+                                adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8], grid[y+10], grid[y+9], grid[y+8]]
+                            elif grid[x][0] == "i":
+                                adj = [grid[y+1], grid[y-1], grid[y-2], grid[y-10], grid[y-9], grid[y-8]]
+                            else:
+                                adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8], grid[y+10], grid[y+9], grid[y+8]]
+
                         elif grid[x][0] == "a":
                             adj = [grid[y-1], grid[y+1], grid[y+10], grid[y+9], grid[y+8]]
+                        elif grid[x][0] == "b":
+                            adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8], grid[y+10], grid[y+9], grid[y+8]]
+                        elif grid[x][0] == "h":
+                            adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8], grid[y+10], grid[y+9], grid[y+8]]
                         elif grid[x][0] == "i":
                             adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8]]
                         else:
-                            adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8], grid[y+10], grid[y+9], grid[y+8]]
+                            adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8], grid[y+10], grid[y+9], grid[y+8]]## == FULLSQUARE
                         break
                     else:
                         if grid[x][2] == "!":
                           print ("That square has been flagged. Remove the flag to sweep the square.")
-                          time.sleep(1)
+                          time.sleep(a)
                           break
                         elif grid[x][3] == "x":
-                            print ("You sweeped a square, but there was a mine there. You have exploded.")
-                            time.sleep(1)
+                            if health == 1:
+                                os.system('cls')
+                                time.sleep(a)
+                                print ("You sweeped a square, but there was a mine there. You have exploded.")
+                                health = 0
+                            else:
+                                print ("You sweeped a square, but there was a mine there. You lost 1 health.\n")
+                                health -= 1
+                            time.sleep(b)
                             #Do an ascii explosion here.
                             break
                         elif grid[x][3] in xaxis:
@@ -289,7 +348,7 @@ while True:
                     if x == y:
                         grid[x][2] = number
                     grid[x][3] = number
-        if times == 0:
+        if times == 0: #Shows the squares near the first selected one. Change this into near.
             for x in range (len(adj)):
                 if adj[x][3] != "x":
                     grid[adj[x][5]][2] = grid[adj[x][5]][3] #adj[x][5] = index of the adjacent one.
@@ -314,20 +373,20 @@ while True:
             if correct == mines and sweeped == len(grid) - mines:
                 print ("You have succesfully marked all the mines.")
                 play = "no"
-                time.sleep(3)
+                time.sleep(c)
                 break
         os.system('cls')
-        print ("    [Mines: {}] [Flags placed: {}]".format(mines, flags))
+        print ("     [Mines: {}] [Flags placed: {}]".format(mines, flags))
         times = 1
     action = input("Do you want to go again? Y/N \n")
     action = action.lower()
     if "n" in action:
         print ("Alright, exiting.")
-        timme.sleep(3)
+        timme.sleep(c)
         import sys
         sys.exit()
     elif "y" in action:
         print ("Alright, restarting...")
-        time.sleep(3)
+        time.sleep(c)
     else:
         print ("%d is not an option." %(action))

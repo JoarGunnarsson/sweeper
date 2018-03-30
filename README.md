@@ -1,2 +1,2 @@
 # sweeper
-A version of minesweeper, coded badly.
+A home-made minesweeper.
