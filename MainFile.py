@@ -1,5 +1,6 @@
 #grid[x][2] is public one, grid[x][3] is the hidden one.
-#Add more map-sizes
+#If start is not a1, every number is wrong.
+#Numbers are also wrong even if it is so.
 import os
 import random
 import time
@@ -103,11 +104,15 @@ while True:
         print ("[Health: %d]"%(health))
         while True:
             if times == 0:
-                square = input("Enter the coordinates of the square you want to sweep/flag (e.g A5) and what you want to do with it ('flag', 'unflag' or 'sweep').\n")
+                print ("Enter the coordinates of the square and then what you want to do with it ('flag', 'unflag' or 'sweep').\n")
+                square = input("First, the coordinates.\n")
+                action = input("Now, the action.\n")
             else:
                 square = input("Enter the coordinates.\n")
+                action = input("Enter the action.\n")
+            action = action.lower()
             square = square.lower()
-            if "save" in square:
+            if "save" in square or "save" in action:
                 print ("Alright, saving the board.")
                 string = "boardSize = "+str(boardSize)+"\nhealth = "+str(health)+"\ntimes = "+str(times)+"\nsavegrid = "+str(grid)
                 f = open("save.py","w")
@@ -116,119 +121,131 @@ while True:
                 print ("Done.\n")
                 time.sleep(b)
                 break
-            elif times == 0 and "sweep" not in square:
+            elif times == 0 and action != "sweep":
                 print ("The first action should be a sweep.")
-            elif 'unflag' in square:
-                action = 'unflag'
-                square = square.replace("unflag","")
+            elif action == "unflag":
                 square = square.replace(" ","")
                 square = list(square)
-                if square[0] in yaxis:######
-                    square0 = square[0]#Saves the letter of the square
-                    square.pop(0)#Removes the letter from square
-                    square = [int("".join(square))]#Joins the numbers of the square together.
-                    square.insert(0,square0)#Adds the letter back.
-                    if square[0] in yaxis and square[1] in xaxis:
-                        break
-                    else:
-                        print ("Write the coordinates of the square properly.")
-                elif square[1] in yaxis:
-                    if len(square) > 2:
-                        print ("Write the coordinates of the square properly.")
-                    else:
-                        square1 = square[1]#Saves the letter of the square
-                        square.pop(1)#Removes the letter from square
+                if len(square) > 1:
+                    if square[0] in yaxis:
+                        if square[-1] in yaxis:
+                            print ("Write the coordinates properly!\n")
+                        else:
+                            square0 = square[0]#Saves the letter of the square
+                            square.pop(0)#Removes the letter from square
+                            square = [int("".join(square))]#Joins the numbers of the square together.
+                            square.insert(0,square0)#Adds the letter back.
+                            if square[0] in yaxis and square[1] in xaxis:
+                                break
+                            else:
+                                print ("Write the coordinates of the square properly.")
+                    elif square[0] in xaxis:
+                        if square[-1] in xaxis:
+                            print ("Write the coordinates of the square properly.")
+                        else:
+                            square1 = square[1]#Saves the letter of the square
+                            square.pop(1)#Removes the letter from square
+                            square = [int("".join(square))]#Joins the numbers of the square together.
+                            square.insert(0,square1)#Adds the letter back.
+                            if square[0] in yaxis and square[1] in xaxis:
+                                break
+                            else:
+                                print ("Write the coordinates of the square properly.")
+                    elif square[2] in yaxis:
+                        square2 = square[2]#Saves the letter of the square
+                        square.pop(2)#Removes the letter from square
                         square = [int("".join(square))]#Joins the numbers of the square together.
-                        square.insert(0,square1)#Adds the letter back.
+                        square.insert(0,square2)#Adds the letter back.
                         if square[0] in yaxis and square[1] in xaxis:
                             break
                         else:
                             print ("Write the coordinates of the square properly.")
-                elif square[2] in yaxis:
-                    square2 = square[2]#Saves the letter of the square
-                    square.pop(2)#Removes the letter from square
-                    square = [int("".join(square))]#Joins the numbers of the square together.
-                    square.insert(0,square2)#Adds the letter back.
-                    if square[0] in yaxis and square[1] in xaxis:
-                        break
                     else:
                         print ("Write the coordinates of the square properly.")
                 else:
-                    print ("Write the coordinates of the square properly.")
-            elif 'flag' in square:
-                action = 'flag'
-                square = square.replace("flag","")
+                    print ("Write properly.")
+            elif action == "flag":
                 square = square.replace(" ","")
                 square = list(square)
-                if square[0] in yaxis:######
-                    square0 = square[0]#Saves the letter of the square
-                    square.pop(0)#Removes the letter from square
-                    square = [int("".join(square))]#Joins the numbers of the square together.
-                    square.insert(0,square0)#Adds the letter back.
-                    if square[0] in yaxis and square[1] in xaxis:
-                        break
-                    else:
-                        print ("Write the coordinates of the square properly.")
-                elif square[1] in yaxis:
-                    if len(square) > 2:
-                        print ("Write the coordinates of the square properly.")
-                    else:
-                        square1 = square[1]#Saves the letter of the square
-                        square.pop(1)#Removes the letter from square
+                if len(square) > 1:
+                    if square[0] in yaxis:
+                        if square[-1] in yaxis:
+                            print ("Write the coordinates properly!\n")
+                        else:
+                            square0 = square[0]#Saves the letter of the square
+                            square.pop(0)#Removes the letter from square
+                            square = [int("".join(square))]#Joins the numbers of the square together.
+                            square.insert(0,square0)#Adds the letter back.
+                            if square[0] in yaxis and square[1] in xaxis:
+                                break
+                            else:
+                                print ("Write the coordinates of the square properly.")
+                    elif square[0] in xaxis:
+                        if square[-1] in xaxis:
+                            print ("Write the coordinates of the square properly.")
+                        else:
+                            square1 = square[1]#Saves the letter of the square
+                            square.pop(1)#Removes the letter from square
+                            square = [int("".join(square))]#Joins the numbers of the square together.
+                            square.insert(0,square1)#Adds the letter back.
+                            if square[0] in yaxis and square[1] in xaxis:
+                                break
+                            else:
+                                print ("Write the coordinates of the square properly.")
+                    elif square[2] in yaxis:
+                        square2 = square[2]#Saves the letter of the square
+                        square.pop(2)#Removes the letter from square
                         square = [int("".join(square))]#Joins the numbers of the square together.
-                        square.insert(0,square1)#Adds the letter back.
+                        square.insert(0,square2)#Adds the letter back.
                         if square[0] in yaxis and square[1] in xaxis:
                             break
                         else:
                             print ("Write the coordinates of the square properly.")
-                elif square[2] in yaxis:
-                    square2 = square[2]#Saves the letter of the square
-                    square.pop(2)#Removes the letter from square
-                    square = [int("".join(square))]#Joins the numbers of the square together.
-                    square.insert(0,square2)#Adds the letter back.
-                    if square[0] in yaxis and square[1] in xaxis:
-                        break
                     else:
                         print ("Write the coordinates of the square properly.")
                 else:
                     print ("Write the coordinates of the square properly.")
-            elif 'sweep' in square:
-                action = 'sweep'
-                square = square.replace("sweep","")
+            elif action == "sweep":
                 square = square.replace(" ","")
                 square = list(square)
-                if square[0] in yaxis:######
-                    square0 = square[0]#Saves the letter of the square
-                    square.pop(0)#Removes the letter from square
-                    square = [int("".join(square))]#Joins the numbers of the square together.
-                    square.insert(0,square0)#Adds the letter back.
-                    if square[0] in yaxis and square[1] in xaxis:
-                        break
-                    else:
-                        print ("Write the coordinates of the square properly.")
-                elif square[1] in yaxis:
-                    if len(square) > 2:
-                        print ("Write the coordinates of the square properly.")
-                    else:
-                        square1 = square[1]#Saves the letter of the square
-                        square.pop(1)#Removes the letter from square
+                if len(square) > 1:
+                    if square[0] in yaxis:
+                        if square[-1] in yaxis:
+                            print ("Write the coordinates properly!\n")
+                        else:
+                            square0 = square[0]#Saves the letter of the square
+                            square.pop(0)#Removes the letter from square
+                            square = [int("".join(square))]#Joins the numbers of the square together.
+                            square.insert(0,square0)#Adds the letter back.
+                            if square[0] in yaxis and square[1] in xaxis:
+                                break
+                            else:
+                                print ("Write the coordinates of the square properly.")
+                    elif square[0] in xaxis:
+                        if square[-1] in xaxis:
+                            print ("Write the coordinates of the square properly.")
+                        else:
+                            square1 = square[1]#Saves the letter of the square
+                            square.pop(1)#Removes the letter from square
+                            square = [int("".join(square))]#Joins the numbers of the square together.
+                            square.insert(0,square1)#Adds the letter back.
+                            if square[0] in yaxis and square[1] in xaxis:
+                                break
+                            else:
+                                print ("Write the coordinates of the square properly.")
+                    elif square[2] in yaxis:
+                        square2 = square[2]#Saves the letter of the square
+                        square.pop(2)#Removes the letter from square
                         square = [int("".join(square))]#Joins the numbers of the square together.
-                        square.insert(0,square1)#Adds the letter back.
+                        square.insert(0,square2)#Adds the letter back.
                         if square[0] in yaxis and square[1] in xaxis:
                             break
                         else:
                             print ("Write the coordinates of the square properly.")
-                elif square[2] in yaxis:
-                    square2 = square[2]#Saves the letter of the square
-                    square.pop(2)#Removes the letter from square
-                    square = [int("".join(square))]#Joins the numbers of the square together.
-                    square.insert(0,square2)#Adds the letter back.
-                    if square[0] in yaxis and square[1] in xaxis:
-                        break
                     else:
                         print ("Write the coordinates of the square properly.")
                 else:
-                    print ("Write the coordinates of the square properly.")
+                    print ("Write properly.")
             else:
                 print ("You have to include the action!")
         for x in range (len(grid)):
@@ -252,29 +269,31 @@ while True:
                         grid[x][4] = "yes"
                         y = x
                         toRemove = []
-                        if boardSize == 9:#Use the below thing on the 60 lines long adj code below.
-                            adj = [grid[y-1], grid[y+1], grid[y-10], grid[y-9], grid[y-8], grid[y+10], grid[y+9], grid[y+8]]#Starta med fullsquare, pop():a de som inte är rätt.
+                        adj = []
+                        if boardSize == 9:#This seems to work.
+                            additions = [-1,-8, -9, -10, 1, 8, 9, 10]
                         elif boardSize == 20:
-                            adj = [grid[y-1], grid[y+1], grid[y-21], grid[y-20], grid[y-19], grid[y+21], grid[y+20], grid[y+19]]#Simplify adjacent, use adj.append(grid[tja... vad ska man säga?])
+                            additions = [-1, -19, -20, -21, 1, 19, 20, 21]
                         if grid[y][1] == 1:
-                            toRemove.append(adj[0])
-                            toRemove.append(adj[2])
-                            toRemove.append(adj[7])
+                            toRemove.append(additions[0])
+                            toRemove.append(additions[3])
+                            toRemove.append(additions[5])
                         if grid[y][1] == 9:
-                            toRemove.append(adj[1])
-                            toRemove.append(adj[4])
-                            toRemove.append(adj[5])
+                            toRemove.append(additions[1])
+                            toRemove.append(additions[4])
+                            toRemove.append(additions[7])
                         if grid[y][0] == "a":
-                            toRemove.append(adj[5])
-                            toRemove.append(adj[6])
-                            toRemove.append(adj[7])
+                            toRemove.append(additions[1])
+                            toRemove.append(additions[2])
+                            toRemove.append(additions[3])
                         if grid[y][0] == "i":
-                            toRemove.append(adj[2])
-                            toRemove.append(adj[3])
-                            toRemove.append(adj[4])
-                        for x in range(len(adj)):
-                            if toRemove[x] in adj:
-                                adj.remove(toRemove[x])
+                            toRemove.append(additions[5])
+                            toRemove.append(additions[6])
+                            toRemove.append(additions[7])
+                        additions = [x for x in additions if x not in toRemove]
+                        for x in additions:
+                            if y+x < boardSize ** 2 - 1:
+                                adj.append(grid[y+x])
                         break
                     else:
                         if grid[x][2] == "!":
@@ -295,12 +314,11 @@ while True:
                         elif grid[x][3] in xaxis:
                             grid[x][2] = grid[x][3]
                             grid[x][4] = "yes"
-
                 elif action == "flag":
                     grid[x][2] = "!"
                     break
                 else:
-                    print ("Error, action != either flag or sweep...")
+                    print ("Error, action is not either flag or sweep...")
         if times == 0 and "save" not in square:
             for x in range (len(grid)):
                 if x != y:
@@ -309,76 +327,53 @@ while True:
                         grid[x][3] = "x"
                     else:
                         grid[x][3] = "number"
+        bombas = 0
+        for p in range(len(grid)):
+            if grid[p][3] == "x":#They will be either "x" or "number" here.
+                bombas += 1
         if times == 0:
-            for x in range (len(grid)):#The code below looks like it needs simplifying. It also doesn't work for 20x20. Change to for x in range(len(adj)): if adj[x][3] == "x"
+            for x in range (len(grid)):#The code below does not work as intended. Does not count bombs correctly.
                 if grid[x][3] != "x" and grid[x][3] != "N/A":
-                    number = 0
-                    if grid[x][1] != 1 and grid[x][1] != 9:
-                        if x > 0:
-                            if grid[x-1][3] == "x":
-                                number += 1
-                        if x > 7:
-                            if grid[x-8][3] == "x":
-                                number += 1
-                        if x > 8:
-                            if grid[x-9][3] == "x":
-                                number += 1
-                        if x > 9:
-                            if grid[x-10][3] == "x":
-                                number += 1
-                        if x < 71:
-                            if grid[x+10][3] == "x":
-                                number += 1
-                        if x < 72:
-                            if grid[x+9][3] == "x":
-                                number += 1
-                        if x < 73:
-                            if grid[x+8][3] == "x":
-                                number += 1
-                        if x < 80 and grid[x][1] != 9:
-                            if grid[x+1][3] == "x":
-                                number += 1
-                    elif grid[x][1] == 1:
-                        if x > 7:
-                            if grid[x-8][3] == "x":
-                                number += 1
-                        if x > 8:
-                            if grid[x-9][3] == "x":
-                                number += 1
-                        if x < 71:
-                            if grid[x+10][3] == "x":
-                                number += 1
-                        if x < 72:
-                            if grid[x+9][3] == "x":
-                                number += 1
-                        if x < 80:
-                            if grid[x+1][3] == "x":
-                                number += 1
-                    elif grid[x][1] == 9:
-                        number = 0
-                        if x > 0:
-                            if grid[x-1][3] == "x":
-                                number += 1
-                        if x > 8:
-                            if grid[x-9][3] == "x":
-                                number += 1
-                        if x > 9:
-                            if grid[x-10][3] == "x":
-                                number += 1
-                        if x < 72:
-                            if grid[x+9][3] == "x":
-                                number += 1
-                        if x < 73:
-                            if grid[x+8][3] == "x":
-                                number += 1
+                    tempAdj = []
+                    bombCount = 0
+                    toRemove = []
+                    if boardSize == 9:
+                        additions = [-1,-8, -9, -10, 1, 8, 9, 10]
+                    elif boardSize == 20:
+                        additions = [-1, -19, -20, -21, 1, 19, 20, 21]
+                    if grid[x][1] == 1:
+                        toRemove.append(additions[0])
+                        toRemove.append(additions[3])
+                        toRemove.append(additions[5])
+                    if grid[x][1] == 9:
+                        toRemove.append(additions[1])
+                        toRemove.append(additions[4])
+                        toRemove.append(additions[7])
+                    if grid[x][0] == "a":
+                        toRemove.append(additions[1])
+                        toRemove.append(additions[2])
+                        toRemove.append(additions[3])
+                    if grid[x][0] == "i":
+                        toRemove.append(additions[5])
+                        toRemove.append(additions[6])
+                        toRemove.append(additions[7])
+                    print (additions)
+                    additions = [temp for temp in additions if temp not in toRemove]
+                    print (additions)
+                    for number in additions:
+                        if x+number < boardSize ** 2 - 1:
+                            tempAdj.append(grid[x+number])
+                    for temp in range(len(tempAdj)):
+                        if tempAdj[temp][3] == "x":
+                            bombCount += 1
+                    grid[x][3] = bombCount
                     if x == y:
-                        grid[x][2] = number
-                    grid[x][3] = number
+                        grid[x][2] = bombCount
         if times == 0 and "save" not in square: #Shows the squares adjacent to the first selected one.
-            for x in range (len(adj)):
-                if adj[x][3] != "x":
-                    grid[adj[x][5]][2] = grid[adj[x][5]][3] #adj[x][5] = index of the adjacent one.
-                    grid[adj[x][5]][4] = "yes"
+            for x in adj:
+                if x[3] != "x":
+                    x[2] = x[3] #adj[x][5] = index of the adjacent one.
+                    x[4] = "yes"
         correct = 0
         flags = 0
         sweeped = 0
