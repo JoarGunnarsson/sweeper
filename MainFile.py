@@ -1,4 +1,7 @@
 #grid[x][2] is public one, grid[x][3] is the hidden one.
+#On 20x20, G8 and H8 does not show their number when sweeped, stays at '?'. Says "alreay sweeped". I9 was a 0, but lost health when sweeping J10. Might be a problem with counting bombs, and one with
+#Remove [Mines:...] after you have won.
+#The prevously mentionen bug does not sem to be present for 9x9. It is possible that it is rare enough that it does not appear when there are 81 squares, but does when there are 400. The bug is probably caused by boardSize.
 import os
 import random
 import time
