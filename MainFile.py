@@ -1,7 +1,4 @@
 #grid[x][2] is public one, grid[x][3] is the hidden one.
-#On 20x20, G8 and H8 does not show their number when sweeped, stays at '?'. Says "alreay sweeped". I9 was a 0, but lost health when sweeping J10. Might be a problem with counting bombs, and one with
-#Remove [Mines:...] after you have won.
-#The prevously mentionen bug does not sem to be present for 9x9. It is possible that it is rare enough that it does not appear when there are 81 squares, but does when there are 400. The bug is probably caused by boardSize.
 import os
 import random
 import time
@@ -31,7 +28,7 @@ while True:
                 break
             else:
                 print ("The save file is empty, save cannot be loaded!")
-        else:
+        elif "new" in action:
             while True:
                 boardSize = input("Select size of the grid: '9x9', '20x20'.\n")
                 if "9" in boardSize:
@@ -57,6 +54,8 @@ while True:
                 else:
                     print ("That's not a valid difficulty!\n")
             break
+        else:
+            print ("Please include 'new' or 'load'!\n")
     print ("\nEnter /save at any time to save the game.\n")
     if boardSize == 9:
         yaxis = ["a","b","c","d","e","f","g","h","i"]
@@ -102,11 +101,8 @@ while True:
         while True:
             if times == 0:
                 print ("Enter the coordinates of the square and then what you want to do with it ('flag', 'unflag' or 'sweep').\n")
-                square = input("First, the coordinates.\n")
-                action = input("Now, the action.\n")
-            else:
-                square = input("Enter the coordinates.\n")
-                action = input("Enter the action.\n")
+            square = input("Enter the coordinates.\n")
+            action = input("Enter the action.\n")
             action = action.lower()
             square = square.lower()
             if "save" in square or "save" in action:
@@ -253,14 +249,14 @@ while True:
                     bombCount = 0
                     toRemove = []
                     if boardSize == 9:
-                        additions = [-1,-8, -9, -10, 1, 8, 9, 10]
+                        additions = [-1, -8, -9, -10, 1, 8, 9, 10]
                     elif boardSize == 20:
                         additions = [-1, -19, -20, -21, 1, 19, 20, 21]
                     if grid[x][1] == 1:
                         toRemove.append(additions[0])
                         toRemove.append(additions[3])
                         toRemove.append(additions[5])
-                    if grid[x][1] == 9:
+                    if grid[x][1] == boardSize:
                         toRemove.append(additions[1])
                         toRemove.append(additions[4])
                         toRemove.append(additions[7])
@@ -268,7 +264,7 @@ while True:
                         toRemove.append(additions[1])
                         toRemove.append(additions[2])
                         toRemove.append(additions[3])
-                    if grid[x][0] == "i":
+                    if grid[x][0] == yaxis[-1]:
                         toRemove.append(additions[5])
                         toRemove.append(additions[6])
                         toRemove.append(additions[7])
@@ -311,7 +307,7 @@ while True:
         if "save" not in square:
             times += 1
         if times > 0:
-            if health != 0:
+            if health != 0 and play != "no":
                 print ("     [Mines: {}] [Flags placed: {}]".format(mines, flags))
     while True:
         action = input("Do you want to go again? Y/N \n")
